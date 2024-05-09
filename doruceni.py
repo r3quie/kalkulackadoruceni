@@ -7,7 +7,7 @@ import locale
 locale.setlocale(locale.LC_TIME, "cs_CZ.utf8")
 dateformat = '%d.%m.%Y'
 
-def is_holiday_or_weekend(zacatek, delka):
+def is_holiday_or_weekend(zacatek: datetime, delka: timedelta):
     holidays = CzechRepublic().holidays(zacatek.year)
     konec = zacatek + delka
     if zacatek.year != konec.year:
