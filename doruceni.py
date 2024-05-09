@@ -9,11 +9,11 @@ dateformat = '%d.%m.%Y'
 
 def is_holiday_or_weekend(zacatek: datetime, delka: timedelta):
     holidays = CzechRepublic().holidays(zacatek.year)
-    konec = zacatek + delka
+    konec = datetime.date(zacatek + delka)
     if zacatek.year != konec.year:
         holidays += CzechRepublic().holidays(konec.year)
     while True:
-        if konec.weekday() == 5 or konec.weekday() == 6 or konec in holidays:
+        if konec.weekday() == 5 or konec.weekday() == 6 or konec in list(zip(*holidays))[0]:
             konec += timedelta(days=1)
         else:
             break
@@ -23,6 +23,7 @@ def main():
     zacatek = datetime.strptime(input("Zadejte datum zahájení běhu lhůty: "), dateformat)
     delka = timedelta(days=int(input("Zadejte délku lhůty v dnech: ")))
     print(is_holiday_or_weekend(zacatek, delka))
+        
 
 if __name__ == '__main__':
     main()
