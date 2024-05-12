@@ -1,6 +1,7 @@
 from workalendar.registry import registry
 from workalendar.europe import CzechRepublic
 from datetime import date, timedelta, datetime
+from dateutil.relativedelta import relativedelta
 import calendar
 #import locale
 
@@ -19,9 +20,20 @@ def is_holiday_or_weekend(zacatek: datetime, delka: timedelta):
             break
     return konec.strftime(dateformat + ' (%A)')
 
+def get_time(gotten: str, delka: int):
+    if gotten == 'd':
+        return timedelta(days=delka)
+    elif gotten == 'm':
+        return relativedelta(months=delka)
+    elif gotten == 'r':
+        return relativedelta(years=delka)
+    else:
+        print("Neplatná jednotka času.")
+        return get_time()
+
 def main():
     zacatek = datetime.strptime(input("Zadejte datum zahájení běhu lhůty: "), dateformat)
-    delka = timedelta(days=int(input("Zadejte délku lhůty v dnech: ")))
+    delka = get_time(input("Zadejte jednotku času (d/m/r): "), int(input("Zadejte délku lhůty: ")))
     print(is_holiday_or_weekend(zacatek, delka))
         
 
