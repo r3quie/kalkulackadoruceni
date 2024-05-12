@@ -42,7 +42,7 @@ def input_delka():
     while True:
         gotten = input("Zadejte jednotku času (d/m/r): ")
         while True:
-            delka = int(input("Zadejte délku lhůty: "))
+            delka = int(input("Zadejte délku lhůty: ")) # nedává tady smysl definovat jako int, když zkoušíš ValueError až potom, ValueError dostaneš už tady, chceš try: teprve tohle
             try:
                 delka = get_time(gotten, delka)
                 if delka is not False:
