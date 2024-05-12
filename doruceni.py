@@ -39,15 +39,18 @@ def export_handle(zacatek, delka):
     return konec.strftime(dateformat + ' (%A)'), pravni_moc(konec).strftime(dateformat + ' (%A)')
 
 def input_delka():
-    gotten = input("Zadejte jednotku času (d/m/r): ")
     while True:
-        delka = int(input("Zadejte délku lhůty: "))
-        try:
-            delka = get_time(gotten, delka)
-            if delka is not False:
-                return delka
-        except ValueError:
-            print("Neplatná délka lhůty.")
+        gotten = input("Zadejte jednotku času (d/m/r): ")
+        while True:
+            delka = int(input("Zadejte délku lhůty: "))
+            try:
+                delka = get_time(gotten, delka)
+                if delka is not False:
+                    return delka
+                else:
+                    break
+            except ValueError:
+                print("Neplatná délka lhůty.")
 
 
 def main():
