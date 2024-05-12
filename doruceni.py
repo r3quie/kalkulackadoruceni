@@ -18,7 +18,7 @@ def is_holiday_or_weekend(zacatek: datetime, delka: timedelta):
             konec += timedelta(days=1)
         else:
             break
-    return konec.strftime(dateformat + ' (%A)')
+    return konec
 
 def get_time(gotten: str, delka: int):
     if gotten == 'd':
@@ -34,6 +34,10 @@ def get_time(gotten: str, delka: int):
 def pravni_moc(posledni_den: datetime):
     return posledni_den + timedelta(days=1)
 
+def export_handle(zacatek, delka):
+    konec = is_holiday_or_weekend(zacatek, delka)
+    return konec.strftime(dateformat + ' (%A)'), pravni_moc(konec).strftime(dateformat + ' (%A)')
+
 def input_delka():
     gotten = input("Zadejte jednotku času (d/m/r): ")
     while True:
@@ -48,12 +52,10 @@ def input_delka():
 
 def main():
     zacatek = datetime.strptime(input("Zadejte datum zahájení běhu lhůty: "), dateformat)
-    gotten = input("Zadejte jednotku času (d/m/r): ")
-    delka = int(input("Zadejte délku lhůty: "))
-    delka = get_time(gotten, delka)
-    posledni_den = is_holiday_or_weekend(zacatek, delka)
+    delka = input_delka()
+    posledni_den, dpravni_moc = export_handle(zacatek, delka)
     print(f"Poslední den lhůty bude {posledni_den}.")
-    print(f"X nabude právní moci {pravni_moc(posledni_den)}.")
+    print(f"X nabude právní moci {dpravni_moc}.")
 
         
 
