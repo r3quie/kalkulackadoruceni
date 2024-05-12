@@ -29,12 +29,32 @@ def get_time(gotten: str, delka: int):
         return relativedelta(years=delka)
     else:
         print("Neplatná jednotka času.")
-        return get_time()
+        return False
+    
+def pravni_moc(posledni_den: datetime):
+    return posledni_den + timedelta(days=1)
+
+def input_delka():
+    gotten = input("Zadejte jednotku času (d/m/r): ")
+    while True:
+        delka = int(input("Zadejte délku lhůty: "))
+        try:
+            delka = get_time(gotten, delka)
+            if delka is not False:
+                return delka
+        except ValueError:
+            print("Neplatná délka lhůty.")
+
 
 def main():
     zacatek = datetime.strptime(input("Zadejte datum zahájení běhu lhůty: "), dateformat)
-    delka = get_time(input("Zadejte jednotku času (d/m/r): "), int(input("Zadejte délku lhůty: ")))
-    print(is_holiday_or_weekend(zacatek, delka))
+    gotten = input("Zadejte jednotku času (d/m/r): ")
+    delka = int(input("Zadejte délku lhůty: "))
+    delka = get_time(gotten, delka)
+    posledni_den = is_holiday_or_weekend(zacatek, delka)
+    print(f"Poslední den lhůty bude {posledni_den}.")
+    print(f"X nabude právní moci {pravni_moc(posledni_den)}.")
+
         
 
 if __name__ == '__main__':
