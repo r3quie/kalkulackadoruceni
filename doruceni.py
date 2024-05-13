@@ -8,6 +8,9 @@ import calendar
 #locale.setlocale(locale.LC_TIME, "cs_CZ.utf8")
 dateformat = '%d.%m.%Y'
 
+class NegativeNumber(Exception):
+    pass
+
 def is_holiday_or_weekend(zacatek: datetime, delka: timedelta):
     holidays = CzechRepublic().holidays(zacatek.year)
     konec = datetime.date(zacatek + delka)
@@ -28,7 +31,7 @@ def get_time(gotten: str, delka: int):
     elif gotten == 'r':
         return relativedelta(years=delka)
     else:
-        print("Neplatná jednotka času.")
+        print(f"Neplatná jednotka času. '{gotten}' není platná jednotka času (d, m nebo r).")
         return False
     
 def pravni_moc(posledni_den: datetime):
@@ -42,15 +45,20 @@ def input_delka():
     while True:
         gotten = input("Zadejte jednotku času (d/m/r): ")
         while True:
-            delka = int(input("Zadejte délku lhůty: ")) # nedává tady smysl definovat jako int, když zkoušíš ValueError až potom, ValueError dostaneš už tady, chceš try: teprve tohle
             try:
-                delka = get_time(gotten, delka)
-                if delka is not False:
-                    return delka
-                else:
-                    break
+                delka = int(input("Zadejte délku lhůty: "))
+                if delka <= 0:
+                    print("Délka lhůty musí být kladné číslo.")
+                    raise NegativeNumber(f"'{delka}' není kladné číslo.")
             except ValueError:
                 print("Neplatná délka lhůty.")
+            except NegativeNumber:
+                print(f"'{delka}' není kladné číslo.")
+            else:
+                break
+        delka = get_time(gotten, delka)
+        if delka is not False:
+            return delka
 
 
 def main():
